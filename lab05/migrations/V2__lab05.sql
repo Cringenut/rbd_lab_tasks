@@ -205,10 +205,6 @@ CREATE TABLE main_user.passenger(
     CONSTRAINT id_preferred_payment_fk FOREIGN KEY (preferred_payment_type_id) REFERENCES main_user.user(id)
 );
 
-ALTER TABLE main_vehicle.vehicle
-    ADD COLUMN vehicle_type_id INT,
-    ADD CONSTRAINT id_vehicle_type_fk
-    FOREIGN KEY (vehicle_type_id) REFERENCES main_vehicle.vehicle_type(id);
 
 CREATE TABLE main_user.passenger(
     id serial PRIMARY KEY NOT NULL,
@@ -237,6 +233,17 @@ DROP TABLE main_drive.drive;
     CONSTRAINT id_address_destination_fk FOREIGN KEY (address_destination_id) REFERENCES main_drive.address(id)
  );
 
+CREATE TABLE main_vehicle.vehicle_type (
+ id serial PRIMARY KEY NOT NULL,
+ name varchar(100)
+ );
+
+ CREATE TABLE main_vehicle.vehicle_type1 (
+ id serial PRIMARY KEY NOT NULL,
+ name varchar(100)
+ );
+
+
 --ALTER TABLE main_user.driver
     --ADD COLUMN INT;
     --ADD COLUMN user_id INT REFERENCES main_user.user(id);
@@ -257,3 +264,64 @@ ALTER TABLE main_user.driver_rating
 
 ALTER TABLE main_drive.address
     ADD COLUMN area_id INT REFERENCES main_drive.area(id);
+
+
+
+
+SELECT MAX(car_state) AS state
+FROM main_user.driver_rating
+WHERE car_state > 3
+GROUP BY car_state
+ORDER BY state DESC;
+
+
+
+
+
+
+
+SELECT
+    name,
+    surname,
+    phone_number
+FROM main_user.user WHERE phone_number IN (SELECT phone_number FROM main_user.user WHERE phone_number LIKE '4%');
+
+SELECT name
+FROM main_vehicle.vehicle_type
+LIMIT 10 OFFSET 30;
+
+SELECT name
+FROM main_vehicle.vehicle_type
+UNION
+SELECT surname FROM main_user.user;
+
+SELECT name
+FROM main_vehicle.vehicle_type
+EXCEPT
+SELECT name FROM main_vehicle.vehicle_type1;
+
+SELECT name
+FROM main_vehicle.vehicle_type
+INTERSECT
+SELECT name FROM main_vehicle.vehicle_type1;
+
+SELECT * FROM main_vehicle.vehicle_type
+FULL OUTER JOIN main_vehicle.vehicle_type1
+ON main_vehicle.vehicle_type.name = main_vehicle.vehicle_type1.name;
+
+SELECT * FROM main_vehicle.vehicle_type
+INNER JOIN main_vehicle.vehicle_type1
+ON main_vehicle.vehicle_type.name = main_vehicle.vehicle_type1.name;
+
+
+SELECT * FROM main_vehicle.vehicle_type
+LEFT JOIN main_vehicle.vehicle_type1
+ON main_vehicle.vehicle_type.name = main_vehicle.vehicle_type1.name;
+
+SELECT * FROM main_vehicle.vehicle_type
+RIGHT JOIN main_vehicle.vehicle_type1
+ON main_vehicle.vehicle_type.name = main_vehicle.vehicle_type1.name;
+
+SELECT * FROM main_vehicle.vehicle_type
+FULL OUTER JOIN main_vehicle.vehicle_type1
+ON main_vehicle.vehicle_type.name = main_vehicle.vehicle_type1.name;
